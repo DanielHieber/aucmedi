@@ -34,8 +34,10 @@ More information can be found in the docs: [Documentation - AutoML](../../../aut
 import sys
 
 # Internal Libraries
-from aucmedi.automl import block_evaluate, block_predict, block_train, parse_cli, parse_yaml
-from aucmedi.automl.cli import cli_core, cli_evaluation, cli_prediction, cli_training
+from aucmedi.automl import block_evaluate, block_predict, block_train
+from aucmedi.automl.cli import cli_core, \
+    cli_evaluation, cli_prediction, cli_training, cli_yaml, cli_json
+from aucmedi.automl.config_parsers import parse_cli, parse_config_file
 
 
 #-----------------------------------------------------#
@@ -52,6 +54,10 @@ def main():
     cli_prediction(subparsers)
     # Define Subparser Evaluation
     cli_evaluation(subparsers)
+    # Define Subparser for YAML config input
+    cli_yaml(subparsers)
+    # Define Subparser for JSON config input
+    cli_json(subparsers)
 
     # Help page hook for passing no parameters
     if len(sys.argv) <= 1:
@@ -62,17 +68,24 @@ def main():
         args = parser.parse_args()
 
     # Call corresponding cli or yaml parser
-    if args.hub == "yaml":
-        config = parse_yaml(args)
-    else:
-        config = parse_cli(args)
+    match args.hub:
+        case "yaml":
+            config = parse_config_file(args, "yml")
+        case "json":
+            config = parse_config_file(args, "json")
+        case _:
+            config = parse_cli(args)
 
-    # Run training pipeline
-    if config["hub"] == "training": block_train(config)
-    # Run prediction pipeline
-    if config["hub"] == "prediction": block_predict(config)
-    # Run evaluation pipeline
-    if config["hub"] == "evaluation": block_evaluate(config)
+    match config["hub"]:
+        # Run training pipeline
+        case "training":
+            block_train(config)
+        # Run prediction pipeline
+        case "prediction": 
+            block_predict(config)
+        # Run evaluation pipeline
+        case "evaluation":
+            block_evaluate(config)
 
 
 # Runner for direct script call
