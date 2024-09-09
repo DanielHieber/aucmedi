@@ -19,8 +19,13 @@
 #-----------------------------------------------------#
 #                   Library imports                   #
 #-----------------------------------------------------#
-import yaml
+# Python Standard Library
 import json
+
+# Third Party Libraries
+import yaml
+
+# Internal Libraries
 import aucmedi.automl.config_parsers.validation_classes as vc
 
 

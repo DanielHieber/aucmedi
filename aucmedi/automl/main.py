@@ -35,8 +35,7 @@ import sys
 
 # Internal Libraries
 from aucmedi.automl import block_evaluate, block_predict, block_train
-from aucmedi.automl.cli import cli_core, \
-    cli_evaluation, cli_prediction, cli_training, cli_yaml, cli_json
+from aucmedi.automl.cli import cli_core, cli_evaluation, cli_json, cli_prediction, cli_training, cli_yaml
 from aucmedi.automl.config_parsers import parse_cli, parse_config_file
 
 
@@ -81,7 +80,7 @@ def main():
         case "training":
             block_train(config)
         # Run prediction pipeline
-        case "prediction": 
+        case "prediction":
             block_predict(config)
         # Run evaluation pipeline
         case "evaluation":

@@ -69,8 +69,7 @@ def cli_yaml(subparsers):
     ra.add_argument("-cp", "--config_path",
                     type=str,
                     required=True,
-                    help="Path to a YAML file with AUCMEDI AutoML " + \
-                         "configurations")
+                    help="Path to a YAML file with AUCMEDI AutoML configurations")
 
     # Add optional configuration arguments
     oa = parser_yaml.add_argument_group("optional arguments")
@@ -94,8 +93,7 @@ def cli_json(subparsers):
     ra.add_argument("-cp", "--config_path",
                     type=str,
                     required=True,
-                    help="Path to a JSON file with AUCMEDI AutoML " + \
-                         "configurations")
+                    help="Path to a JSON file with AUCMEDI AutoML configurations")
 
     # Add optional configuration arguments
     oa = parser_yaml.add_argument_group("optional arguments")
@@ -103,7 +101,7 @@ def cli_json(subparsers):
                     "--help",
                     action="help",
                     help="show this help message and exit")
-    
+
 
 #-----------------------------------------------------#
 #                    CLI - Training                   #
