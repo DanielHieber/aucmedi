@@ -49,15 +49,10 @@ More information can be found in the docs: [Documentation - AutoML](../../automl
 from aucmedi.automl.block_train import block_train
 from aucmedi.automl.block_pred import block_predict
 from aucmedi.automl.block_eval import block_evaluate
-# Parser
-from aucmedi.automl.parser_yaml import parse_yaml
-from aucmedi.automl.parser_cli import parse_cli
 
 
 __all__ = [
     "block_train",
     "block_predict",
     "block_evaluate",
-    "parse_yaml",
-    "parse_cli"
 ]

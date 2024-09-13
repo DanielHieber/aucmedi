@@ -52,7 +52,6 @@ def parse_config_file(args, config_file_type):
 
     parsed_config = {}
 
-    print(config)
     # validate yaml according to selected hub type
     match config['general']['hub']:
         case 'training':
