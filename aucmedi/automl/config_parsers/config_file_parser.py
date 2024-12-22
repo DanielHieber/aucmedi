@@ -1,5 +1,5 @@
 #==============================================================================#
-#  Author:       Dominik Müller                                                #
+#  Author:       Dominik Müller <= technically not :P                                              #
 #  Copyright:    2024 IT-Infrastructure for Translational Medical Research,    #
 #                University of Augsburg                                        #
 #                                                                              #
@@ -20,24 +20,55 @@
 #                   Library imports                   #
 #-----------------------------------------------------#
 # Python Standard Library
+import json
+
 # Third Party Libraries
+import yaml
+
 # Internal Libraries
+import aucmedi.automl.config_parsers.validation_classes as vc
 
 
 #-----------------------------------------------------#
-#                    Parser - YAML                    #
+#                  Config File Parser                 #
 #-----------------------------------------------------#
-def parse_yaml(args):
-    """ Internal function for parsing a YAML file to a valid configuration
-    dictionary.
+def parse_config_file(args, config_file_type):
+    """ Internal function for parsing a YAML or JSON file to a valid
+    configuration dictionary.
     """
-    # Extract filepath to YAML configuration file
+    cmd_args = vars(args)
+    config = {}
 
-    # verify existence
+    match config_file_type:
+        case "yml":
+            with open(cmd_args['config_path'], 'r') as file:
+                config = yaml.safe_load(file)
+        case "json":
+            with open(cmd_args['config_path'], 'r') as file:
+                config = json.load(file)
 
-    # read yaml file
+    # validate general config file parameters
+    vc.BaseConfig(**config['general'])
 
-    # convert variables
+    parsed_config = {}
 
-    # Return valid configs
-    pass
+    # validate config from file according to selected hub type
+    match config['general']['hub']:
+        case 'training':
+            vc.TrainingConfig(**config['training'])
+            parsed_config = config['training']
+            if config['training']['shape_3D']:
+                parsed_config['shape_3D'] = tuple(
+                    config['training']['shape_3D'])
+        case 'prediction':
+            vc.PredictionConfig(**config['prediction'])
+            parsed_config = config['prediction']
+        case 'evaluation':
+            vc.EvaluationConfig(**config['evaluation'])
+            parsed_config = config['evaluation']
+
+    # add general part of config file to parsed config
+    parsed_config['hub'] = config['general']['hub']
+    parsed_config['path_imagedir'] = config['general']['path_imagedir']
+
+    return parsed_config

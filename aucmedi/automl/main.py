@@ -34,8 +34,9 @@ More information can be found in the docs: [Documentation - AutoML](../../../aut
 import sys
 
 # Internal Libraries
-from aucmedi.automl import block_evaluate, block_predict, block_train, parse_cli, parse_yaml
-from aucmedi.automl.cli import cli_core, cli_evaluation, cli_prediction, cli_training
+from aucmedi.automl import block_evaluate, block_predict, block_train
+from aucmedi.automl.cli import cli_core, cli_evaluation, cli_json, cli_prediction, cli_training, cli_yaml
+from aucmedi.automl.config_parsers import parse_cli, parse_config_file
 
 
 #-----------------------------------------------------#
@@ -52,6 +53,10 @@ def main():
     cli_prediction(subparsers)
     # Define Subparser Evaluation
     cli_evaluation(subparsers)
+    # Define Subparser for YAML config input
+    cli_yaml(subparsers)
+    # Define Subparser for JSON config input
+    cli_json(subparsers)
 
     # Help page hook for passing no parameters
     if len(sys.argv) <= 1:
@@ -63,7 +68,9 @@ def main():
 
     # Call corresponding cli or yaml parser
     if args.hub == "yaml":
-        config = parse_yaml(args)
+        config = parse_config_file(args, "yml")
+    elif args.hub == "json":
+        config = parse_config_file(args, "json")
     else:
         config = parse_cli(args)
 
